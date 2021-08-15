@@ -7,6 +7,8 @@ TagManager:
   - Food
   - obstacle
   - rock
+  - shield
+  - scoreboost
   layers:
   - Default
   - TransparentFX
@@ -16,8 +18,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Player
+  - Rock
   - 
   - 
   - 

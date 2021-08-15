@@ -24,7 +24,7 @@ public class Food : MonoBehaviour
     private IEnumerator ChangePosition()
     {
         RandomizePosition();
-        yield return new WaitForSeconds(Random.Range(5f, 10f));
+        yield return new WaitForSeconds(Random.Range(7f, 10f));
         StartCoroutine(ChangePosition());
     }
 
@@ -32,7 +32,8 @@ public class Food : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            RandomizePosition();
+            //RandomizePosition();
+            StartCoroutine(ChangePosition());
         }
     }
 }
