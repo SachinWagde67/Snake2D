@@ -4,28 +4,13 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    public static GameController instance = null;
-    public float snakeSpeed;
-    public BodyPart bodyPrefab;
-    public Sprite tailSprite;
-    public Sprite bodyPartSprite;
-    public SnakeHead snakeHead;
+    [SerializeField] private Snake snake;
+    private LevelGrid levelGrid;
 
-    // Start is called before the first frame update
     void Start()
     {
-        instance = this;
-        StartGame();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void StartGame()
-    {
-        snakeHead.ResetSnake();
+        levelGrid = new LevelGrid(20, 20);
+        snake.Setup(levelGrid);
+        levelGrid.Setup(snake);
     }
 }
