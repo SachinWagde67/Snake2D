@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class GameOverScreen : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI ScoreTxt;
+    [SerializeField] private TextMeshProUGUI Snake1Scoretxt;
+    [SerializeField] private TextMeshProUGUI Snake2Scoretxt;
     [SerializeField] private GameManager gameManager;
 
     private void OnEnable()
@@ -16,7 +17,8 @@ public class GameOverScreen : MonoBehaviour
 
     private void UpdateScore()
     {
-        ScoreTxt.text = "Score : " + gameManager.WhatIsScore();
+        Snake1Scoretxt.text = "Score : " + gameManager.WhatIsScore1();
+        Snake2Scoretxt.text = "Score : " + gameManager.WhatIsScore2();
     }
 
     public void RestartBtn()

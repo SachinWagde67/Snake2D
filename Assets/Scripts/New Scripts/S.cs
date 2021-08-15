@@ -15,13 +15,13 @@ public class S : MonoBehaviour
     [SerializeField] private BoxCollider2D wallArea;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject GameOverScreen;
-    [SerializeField] private GameObject ScoreTxt;
+    [SerializeField] private GameObject ScoreScreen;
 
     private void Start()
     {
         Time.timeScale = 1f;
         GameOverScreen.SetActive(false);
-        ScoreTxt.SetActive(true);
+        ScoreScreen.SetActive(true);
         ResetGame();
         Bounds bound = wallArea.bounds;
         minX = bound.min.x;
@@ -153,25 +153,25 @@ public class S : MonoBehaviour
             segments.Add(Instantiate(SnakeSegmentPrefab));
         }
 
-        gameObject.transform.position = Vector3.zero;
+        //gameObject.transform.position = Vector3.zero;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Food"))
         {
-            gameManager.ScoreIncrement(7f);
+            gameManager.Score1Increment(7f);
             Grow();
         }
         else if (other.CompareTag("obstacle"))
         {
             GameOverScreen.SetActive(true);
-            ScoreTxt.SetActive(false);
+            ScoreScreen.SetActive(false);
             Time.timeScale = 0f;
         }
         else if (other.CompareTag("rock"))
         {
-            gameManager.ScoreDecrement(5f);
+            gameManager.Score1Decrement(5f);
             if (segments.Count > 3)
             {
                 Reduce();
@@ -179,7 +179,7 @@ public class S : MonoBehaviour
         }
         else if(other.CompareTag("scoreboost"))
         {
-            gameManager.ScoreDouble(gameManager.WhatIsScore());
+            gameManager.Score1Double(gameManager.WhatIsScore1());
         }
         else if (other.CompareTag("shield"))
         {

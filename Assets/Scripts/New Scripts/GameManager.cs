@@ -5,8 +5,10 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI ScoreTxt;
-    [SerializeField] public float Score = 0;
+    [SerializeField] private TextMeshProUGUI Snake1ScoreTxt;
+    [SerializeField] private TextMeshProUGUI Snake2ScoreTxt;
+    [SerializeField] public float Score1 = 0;
+    [SerializeField] public float Score2 = 0;
 
     // Update is called once per frame
     void Update()
@@ -14,36 +16,65 @@ public class GameManager : MonoBehaviour
         UpdateUI();
     }
 
-    public void ScoreIncrement(float score)
+    public void Score1Increment(float score)
     {
-        Score += score;
+        Score1 += score;
         UpdateUI();
     }
 
-    public void ScoreDecrement(float score)
+    public void Score2Increment(float score)
     {
-        Score -= score;
-        if(Score < 0)
+        Score2 += score;
+        UpdateUI();
+    }
+
+    public void Score1Decrement(float score)
+    {
+        Score1 -= score;
+        if(Score1 < 0)
         {
-            Score = 0;
+            Score1 = 0;
         }
         UpdateUI();
     }
 
-    public void ScoreDouble(float score)
+    public void Score2Decrement(float score)
     {
-        score *= 2;
-        Score = score;
+        Score2 -= score;
+        if (Score2 < 0)
+        {
+            Score2 = 0;
+        }
         UpdateUI();
     }
 
-    public float WhatIsScore()
+    public void Score1Double(float score)
     {
-        return Score;
+        score *= 2;
+        Score1 = score;
+        UpdateUI();
+    }
+
+    public void Score2Double(float score)
+    {
+        score *= 2;
+        Score2 = score;
+        UpdateUI();
+    }
+
+    public float WhatIsScore1()
+    {
+        return Score1;
+    }
+
+    public float WhatIsScore2()
+    {
+        return Score2;
     }
 
     private void UpdateUI()
     {
-        ScoreTxt.text = "Score : " + Score;
+        Snake1ScoreTxt.text = "Score : " + Score1;
+        Snake2ScoreTxt.text = "Score : " + Score2;
     }
 }
