@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Snake2 : MonoBehaviour
@@ -8,6 +9,8 @@ public class Snake2 : MonoBehaviour
     private List<Transform> segments = new List<Transform>();
     private bool l = false, r = false, u = true, d = false;
     private float minX, maxX, minY, maxY;
+    private bool canDie = true;
+    [SerializeField] private bool isShield = false;
 
     [SerializeField] private Transform SnakeSegmentPrefab;
     [SerializeField] private int initialSize;
@@ -30,6 +33,20 @@ public class Snake2 : MonoBehaviour
     }
 
     private void Update()
+    {
+        Movement();
+        if(isShield)
+        {
+            canDie = false;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        SnakeBody();
+    }
+
+    private void Movement()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -77,12 +94,7 @@ public class Snake2 : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        Movement();
-    }
-
-    private void Movement()
+    private void SnakeBody()
     {
         ScreenWrap();
 
@@ -162,7 +174,7 @@ public class Snake2 : MonoBehaviour
             gameManager.Score2Increment(7f);
             Grow();
         }
-        else if (other.CompareTag("obstacle"))
+        else if ((other.CompareTag("obstacle")) && canDie || (other.CompareTag("Player")) && canDie)
         {
             GameOverScreen.SetActive(true);
             ScoreScreen.SetActive(false);
@@ -180,9 +192,16 @@ public class Snake2 : MonoBehaviour
         {
             gameManager.Score2Double(gameManager.WhatIsScore2());
         }
-        else if (other.CompareTag("shield"))
+        else if(other.CompareTag("shield"))
         {
-
+            isShield = true;
+            Invoke("ShieldOver", 10f);
         }
+    }
+
+    private void ShieldOver()
+    {
+        isShield = false;
+        canDie = true;
     }
 }

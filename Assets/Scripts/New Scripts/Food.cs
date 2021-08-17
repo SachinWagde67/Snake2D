@@ -24,15 +24,14 @@ public class Food : MonoBehaviour
     private IEnumerator ChangePosition()
     {
         RandomizePosition();
-        yield return new WaitForSeconds(Random.Range(7f, 10f));
+        yield return new WaitForSeconds(Random.Range(10f, 20f));
         StartCoroutine(ChangePosition());
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.CompareTag("Player"))
+        if((other.CompareTag("Player")) || (other.CompareTag("Player2")))
         {
-            //RandomizePosition();
             StartCoroutine(ChangePosition());
         }
     }
