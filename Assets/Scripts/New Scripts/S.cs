@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 public class S : MonoBehaviour
@@ -8,16 +7,46 @@ public class S : MonoBehaviour
     private Vector2 direction = Vector2.up;
     private List<Transform> segments = new List<Transform>();
     private bool l = false, r = false, u = true, d= false;
+    private float minX, maxX, minY, maxY;
+    private bool canDie = true;
+    [SerializeField] private bool isShield = false;
 
     [SerializeField] private  Transform SnakeSegmentPrefab;
     [SerializeField] private int initialSize;
+    [SerializeField] private BoxCollider2D wallArea;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private GameObject GameOverScreen;
+    [SerializeField] private GameObject ScoreScreen;
 
     private void Start()
     {
+        Time.timeScale = 1f;
+        GameOverScreen.SetActive(false);
+        ScoreScreen.SetActive(true);
         ResetGame();
+        Bounds bound = wallArea.bounds;
+        minX = bound.min.x;
+        maxX = bound.max.x;
+        minY = bound.min.y;
+        maxY = bound.max.y;
     }
 
     private void Update()
+    {
+        Movement();
+        if(isShield)
+        {
+            canDie = false;
+        }
+        
+    }
+
+    private void FixedUpdate()
+    {
+        SnakeBody();
+    }
+
+    private void Movement()
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -32,7 +61,7 @@ public class S : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
-            if(!u)
+            if (!u)
             {
                 d = true;
                 l = false;
@@ -43,7 +72,7 @@ public class S : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
-            if(!r)
+            if (!r)
             {
                 u = false;
                 d = false;
@@ -54,7 +83,7 @@ public class S : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
-            if(!l)
+            if (!l)
             {
                 r = true;
                 u = false;
@@ -65,9 +94,11 @@ public class S : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void SnakeBody()
     {
-        for (int i = segments.Count -1; i > 0; i--)
+        ScreenWrap();
+
+        for (int i = segments.Count - 1; i > 0; i--)
         {
             segments[i].position = segments[i - 1].position;
         }
@@ -76,6 +107,31 @@ public class S : MonoBehaviour
             Mathf.Round(transform.position.x) + direction.x,
             Mathf.Round(transform.position.y) + direction.y,
             0f);
+    }
+
+    private void ScreenWrap()
+    {
+        Vector3 newPos = transform.position;
+
+        if (newPos.x > maxX)
+        {
+            newPos.x = -newPos.x + 1f;
+        }
+        else if (newPos.x <= minX)
+        {
+            newPos.x = -newPos.x - 1f;
+        }
+
+        if (newPos.y >= maxY)
+        {
+            newPos.y = -newPos.y + 1f;
+        }
+        else if (newPos.y <= minY)
+        {
+            newPos.y = -newPos.y - 1f;
+        }
+
+        transform.position = newPos;
     }
 
     private void Grow()
@@ -108,25 +164,45 @@ public class S : MonoBehaviour
             segments.Add(Instantiate(SnakeSegmentPrefab));
         }
 
-        gameObject.transform.position = Vector3.zero;
+        //gameObject.transform.position = Vector3.zero;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Food"))
         {
+            gameManager.Score1Increment(7f);
             Grow();
         }
-        else if (other.CompareTag("obstacle"))
+        else if ((other.CompareTag("obstacle")) && canDie || (other.CompareTag("Player2")) && canDie)
         {
-            ResetGame();
+            GameOverScreen.SetActive(true);
+            ScoreScreen.SetActive(false);
+            Time.timeScale = 0f;
         }
         else if (other.CompareTag("rock"))
         {
+            gameManager.Score1Decrement(5f);
             if (segments.Count > 3)
             {
                 Reduce();
             }
         }
+        else if(other.CompareTag("scoreboost"))
+        {
+            gameManager.Score1Double(gameManager.WhatIsScore1());
+        }
+        else if (other.CompareTag("shield"))
+        {
+            isShield = true;
+            Invoke("ShieldOver", 10f);
+        }
+
+    }
+
+    private void ShieldOver()
+    {
+        isShield = false;
+        canDie = true;
     }
 }
