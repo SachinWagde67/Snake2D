@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 public class S : MonoBehaviour
@@ -9,6 +8,8 @@ public class S : MonoBehaviour
     private List<Transform> segments = new List<Transform>();
     private bool l = false, r = false, u = true, d= false;
     private float minX, maxX, minY, maxY;
+    private bool canDie = true;
+    [SerializeField] private bool isShield = false;
 
     [SerializeField] private  Transform SnakeSegmentPrefab;
     [SerializeField] private int initialSize;
@@ -32,6 +33,21 @@ public class S : MonoBehaviour
 
     private void Update()
     {
+        Movement();
+        if(isShield)
+        {
+            canDie = false;
+        }
+        
+    }
+
+    private void FixedUpdate()
+    {
+        SnakeBody();
+    }
+
+    private void Movement()
+    {
         if (Input.GetKeyDown(KeyCode.W))
         {
             if (!d)
@@ -45,7 +61,7 @@ public class S : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
-            if(!u)
+            if (!u)
             {
                 d = true;
                 l = false;
@@ -56,7 +72,7 @@ public class S : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
-            if(!r)
+            if (!r)
             {
                 u = false;
                 d = false;
@@ -67,7 +83,7 @@ public class S : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
-            if(!l)
+            if (!l)
             {
                 r = true;
                 u = false;
@@ -78,12 +94,7 @@ public class S : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        Movement();
-    }
-
-    private void Movement()
+    private void SnakeBody()
     {
         ScreenWrap();
 
@@ -163,7 +174,7 @@ public class S : MonoBehaviour
             gameManager.Score1Increment(7f);
             Grow();
         }
-        else if (other.CompareTag("obstacle"))
+        else if ((other.CompareTag("obstacle")) && canDie || (other.CompareTag("Player2")) && canDie)
         {
             GameOverScreen.SetActive(true);
             ScoreScreen.SetActive(false);
@@ -183,7 +194,15 @@ public class S : MonoBehaviour
         }
         else if (other.CompareTag("shield"))
         {
-            
+            isShield = true;
+            Invoke("ShieldOver", 10f);
         }
+
+    }
+
+    private void ShieldOver()
+    {
+        isShield = false;
+        canDie = true;
     }
 }

@@ -9,6 +9,7 @@ TagManager:
   - rock
   - shield
   - scoreboost
+  - Player2
   layers:
   - Default
   - TransparentFX
