@@ -1,16 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
-public class S : MonoBehaviour
+public class Snake2 : MonoBehaviour
 {
     private Vector2 direction = Vector2.up;
     private List<Transform> segments = new List<Transform>();
-    private bool l = false, r = false, u = true, d= false;
+    private bool l = false, r = false, u = true, d = false;
     private float minX, maxX, minY, maxY;
 
-    [SerializeField] private  Transform SnakeSegmentPrefab;
+    [SerializeField] private Transform SnakeSegmentPrefab;
     [SerializeField] private int initialSize;
     [SerializeField] private BoxCollider2D wallArea;
     [SerializeField] private GameManager gameManager;
@@ -32,7 +31,7 @@ public class S : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             if (!d)
             {
@@ -43,9 +42,9 @@ public class S : MonoBehaviour
                 gameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
             }
         }
-        else if (Input.GetKeyDown(KeyCode.S))
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            if(!u)
+            if (!u)
             {
                 d = true;
                 l = false;
@@ -54,9 +53,9 @@ public class S : MonoBehaviour
                 gameObject.transform.localEulerAngles = new Vector3(0, 0, 180);
             }
         }
-        else if (Input.GetKeyDown(KeyCode.A))
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            if(!r)
+            if (!r)
             {
                 u = false;
                 d = false;
@@ -65,9 +64,9 @@ public class S : MonoBehaviour
                 gameObject.transform.localEulerAngles = new Vector3(0, 0, 90);
             }
         }
-        else if (Input.GetKeyDown(KeyCode.D))
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            if(!l)
+            if (!l)
             {
                 r = true;
                 u = false;
@@ -160,7 +159,7 @@ public class S : MonoBehaviour
     {
         if (other.CompareTag("Food"))
         {
-            gameManager.Score1Increment(7f);
+            gameManager.Score2Increment(7f);
             Grow();
         }
         else if (other.CompareTag("obstacle"))
@@ -171,19 +170,19 @@ public class S : MonoBehaviour
         }
         else if (other.CompareTag("rock"))
         {
-            gameManager.Score1Decrement(5f);
+            gameManager.Score2Decrement(5f);
             if (segments.Count > 3)
             {
                 Reduce();
             }
         }
-        else if(other.CompareTag("scoreboost"))
+        else if (other.CompareTag("scoreboost"))
         {
-            gameManager.Score1Double(gameManager.WhatIsScore1());
+            gameManager.Score2Double(gameManager.WhatIsScore2());
         }
         else if (other.CompareTag("shield"))
         {
-            
+
         }
     }
 }

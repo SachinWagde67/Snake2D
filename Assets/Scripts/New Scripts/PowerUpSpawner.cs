@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rock : MonoBehaviour
+public class PowerUpSpawner : MonoBehaviour
 {
     public BoxCollider2D GridArea;
 
@@ -23,16 +23,21 @@ public class Rock : MonoBehaviour
 
     private IEnumerator ChangePosition()
     {
+        yield return new WaitForSeconds(Random.Range(7f, 10f));
+        StartCoroutine(ChangePosTime());
+    }
+
+    private IEnumerator ChangePosTime()
+    {
+        yield return new WaitForSeconds(Random.Range(10f, 20f));
         RandomizePosition();
-        yield return new WaitForSeconds(Random.Range(7f,10f));
-        StartCoroutine(ChangePosition());
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
-        { 
-            RandomizePosition();
+        {
+            StartCoroutine(ChangePosition());
         }
     }
 }

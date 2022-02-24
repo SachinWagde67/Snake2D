@@ -12,13 +12,13 @@ GameObject:
   - component: {fileID: 3962371140780756924}
   - component: {fileID: 3962371140780756927}
   - component: {fileID: 3962371140780756926}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Rock
   m_TagString: rock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3962371140780756925
 Transform:
   m_ObjectHideFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 3962371140780756923}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.93, y: 0, z: 0}
-  m_LocalScale: {x: 2.5, y: 2.5, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -112,6 +112,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GridArea: {fileID: 0}
-  RockPrefab: {fileID: 3962371140780756923}
-  RockSpawnMinTime: 10
-  RockSpawnMaxTime: 15
