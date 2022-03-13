@@ -10,3 +10,8 @@ A retro based 2d snake game but with a twist of having two different snake with 
 - Implemented Co-op feature with dual snakes.
 - Included features like random food spawning and powerups spawing.
 - Increasing score per food eaten, types of collectable foods, different powerups. 
+
+![](Images/4.png)
+![](Images/2.png)
+![](Images/3.png)
+![](Images/1.png)
